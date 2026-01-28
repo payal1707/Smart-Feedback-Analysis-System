@@ -33,8 +33,8 @@ if uploaded_file:
 
   df['Sentiment']=sentiments
 
-st.subheader("Sentiment Analysis Result")
-st.dataframe(df[['feedback','Sentiment']])
+  st.subheader("Sentiment Analysis Result")
+  st.dataframe(df[['feedback','Sentiment']])
 
 sentiments_count=df['Sentiment'].value_counts()
 st.bar_char(sentiments_count)
@@ -65,5 +65,6 @@ else:
   st.write("- Continue current teaching approach")
   st.write("- Maintain student engagement")
   
+
 
 
