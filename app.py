@@ -1,71 +1,81 @@
-import streamlit as st 
+import streamlit as st
 import pandas as pd
 from textblob import TextBlob
 from collections import Counter
+import re
 
-st.set_page_config(page_title="Smart Feedback Analysis System",layout="wide")
+st.set_page_config(
+    page_title="Smart Feedback Analysis System",
+    layout="wide"
+)
 
 st.title("Smart Student Feedback Analysis System (NLP)")
-st.write("Ai-powered analysis of student feedback for faculty & NAAC")
+st.write("AI-powered analysis of student feedback for faculty & NAAC")
 
-uploaded_file=st.file_uploader("Upload Student Feedback CSV",type="csv")
- 
+uploaded_file = st.file_uploader(
+    "Upload Student Feedback CSV",
+    type="csv"
+)
+
 if uploaded_file:
-  df=pd.read_csv(uploaded_file)
-   
-  st.subheader("Raw Student Feedback")
-  st.dataframe(df)
-   
-  sentiments=[]
-  keywords=[]
-   
-  for feedback in df['feedback']:
-    
-    analysis=TextBlob(feedback)
-    polarity=analysis.sentiment.polarity
-    if polarity>0:
-      sentiments.append("Positive")
-    elif polarity<0:
-      sentiments.append("Negative")
+    df = pd.read_csv(uploaded_file)
+
+    if 'feedback' not in df.columns:
+        st.error("CSV must contain a column named 'feedback'")
     else:
-      sentiments.append("Neutral")
-      keywords.extend([word.lower() for word in analysis.words])
+        st.subheader("Raw Student Feedback")
+        st.dataframe(df)
 
-  df['Sentiment']=sentiments
+        sentiments = []
+        keywords = []
 
-  st.subheader("Sentiment Analysis Result")
-  st.dataframe(df[['feedback','Sentiment']])
+        for feedback in df['feedback']:
+            analysis = TextBlob(str(feedback))
+            polarity = analysis.sentiment.polarity
 
-  sentiments_count=df['Sentiment'].value_counts()
-  st.bar_char(sentiments_count)
+            if polarity > 0:
+                sentiments.append("Positive")
+            elif polarity < 0:
+                sentiments.append("Negative")
+            else:
+                sentiments.append("Neutral")
 
-  st.subheader("Common Issues / Topic Identified")
-  common_words=Counter(keywords).most_common(10)
-  issues_df=pd.DataFrame(common_words,columns=["Keywords","Frequency"])
-  st.dataframe(issues_df)
+            # Safe keyword extraction (NO NLTK ERROR)
+            words = re.findall(r'\b\w+\b', feedback.lower())
+            keywords.extend(words)
 
-  st.subheader("Auto Summary")
-  st.write(
-      f"""
-      - Total Feedback Analyzed: {len(df)}
-      - Positive Responses: {sentiments_count.get('Positive',0)}
-      - Negative Responses: {sentiments_count.get('Negative',0)}
-      - Neutral Responses: {sentiments_count.get('Neutral',0)}
-      """
-    
-  )
+        df['Sentiment'] = sentiments
 
-  st.sunheader("Suggested Action Points (Faculty Support)")
-  if sentiments_count.get('Negative',0) >0:
-    st.write("- Slow down teaching pace where required")
-    st.write("- Add more practical examples")
-    st.write("- Improve note Distribution")
-  
-  else:
-    st.write("- Continue current teaching approach")
-    st.write("- Maintain student engagement")
-  
+        st.subheader("Sentiment Analysis Result")
+        st.dataframe(df[['feedback', 'Sentiment']])
 
+        sentiments_count = df['Sentiment'].value_counts()
+        st.subheader("Sentiment Distribution")
+        st.bar_chart(sentiments_count)
 
+        st.subheader("Common Issues / Topics Identified")
+        common_words = Counter(keywords).most_common(10)
+        issues_df = pd.DataFrame(
+            common_words,
+            columns=["Keyword", "Frequency"]
+        )
+        st.dataframe(issues_df)
 
+        st.subheader("Auto Summary")
+        st.write(
+            f"""
+            - Total Feedback Analyzed: {len(df)}
+            - Positive Responses: {sentiments_count.get('Positive', 0)}
+            - Negative Responses: {sentiments_count.get('Negative', 0)}
+            - Neutral Responses: {sentiments_count.get('Neutral', 0)}
+            """
+        )
 
+        st.subheader("Suggested Action Points (Faculty Support)")
+        if sentiments_count.get('Negative', 0) > 0:
+            st.write("- Improve teaching pace where required")
+            st.write("- Add more practical examples")
+            st.write("- Improve notes distribution")
+        else:
+            st.write("- Continue current teaching approach")
+            st.write("- Maintain student engagement")
