@@ -6,7 +6,7 @@ from collections import Counter
 st.set_page_config(page_title="Smart Feedback Analysis System",layout="wide")
 
 st.title("Smart Student Feedback Analysis System (NLP)")
-st.writer("Ai-powered analysis of student feedback for faculty & NAAC")
+st.write("Ai-powered analysis of student feedback for faculty & NAAC")
 
 uploaded_file=st.file_uploader("Upload Student Feedback CSV",type="csv")
  
@@ -67,3 +67,4 @@ else:
   st.write("- Continue current teaching approach")
   st.write("- Maintain student engagement")
   
+
