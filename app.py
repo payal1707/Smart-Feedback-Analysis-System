@@ -28,8 +28,8 @@ if uploaded_file:
     elif polarity<0:
       sentiments.append("Negative")
     else:
-  sentiments.append("Neutral")
-  keywords.extend(analysis.words.lower())
+      sentiments.append("Neutral")
+      keywords.extend(analysis.words.lower())
 
 df['Sentiment']=sentiments
 
@@ -65,3 +65,4 @@ else:
   st.write("- Continue current teaching approach")
   st.write("- Maintain student engagement")
   
+
