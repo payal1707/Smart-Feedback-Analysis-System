@@ -36,35 +36,36 @@ if uploaded_file:
   st.subheader("Sentiment Analysis Result")
   st.dataframe(df[['feedback','Sentiment']])
 
-sentiments_count=df['Sentiment'].value_counts()
-st.bar_char(sentiments_count)
+  sentiments_count=df['Sentiment'].value_counts()
+  st.bar_char(sentiments_count)
 
-st.subheader("Common Issues / Topic Identified")
-common_words=Counter(keywords).most_common(10)
-issues_df=pd.DataFrame(common_words,columns=["Keywords","Frequency"])
-st.dataframe(issues_df)
+  st.subheader("Common Issues / Topic Identified")
+  common_words=Counter(keywords).most_common(10)
+  issues_df=pd.DataFrame(common_words,columns=["Keywords","Frequency"])
+  st.dataframe(issues_df)
 
-st.subheader("Auto Summary")
-st.write(
-    f"""
-    - Total Feedback Analyzed: {len(df)}
-    - Positive Responses: {sentiments_count.get('Positive',0)}
-    - Negative Responses: {sentiments_count.get('Negative',0)}
-    - Neutral Responses: {sentiments_count.get('Neutral',0)}
-    """
+  st.subheader("Auto Summary")
+  st.write(
+      f"""
+      - Total Feedback Analyzed: {len(df)}
+      - Positive Responses: {sentiments_count.get('Positive',0)}
+      - Negative Responses: {sentiments_count.get('Negative',0)}
+      - Neutral Responses: {sentiments_count.get('Neutral',0)}
+      """
     
-)
+  )
 
-st.sunheader("Suggested Action Points (Faculty Support)")
-if sentiments_count.get('Negative',0) >0:
-  st.write("- Slow down teaching pace where required")
-  st.write("- Add more practical examples")
-  st.write("- Improve note Distribution")
+  st.sunheader("Suggested Action Points (Faculty Support)")
+  if sentiments_count.get('Negative',0) >0:
+    st.write("- Slow down teaching pace where required")
+    st.write("- Add more practical examples")
+    st.write("- Improve note Distribution")
   
-else:
-  st.write("- Continue current teaching approach")
-  st.write("- Maintain student engagement")
+  else:
+    st.write("- Continue current teaching approach")
+    st.write("- Maintain student engagement")
   
+
 
 
 
