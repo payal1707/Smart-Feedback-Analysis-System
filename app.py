@@ -21,7 +21,7 @@ if uploaded_file:
    
   for feedback in df['feedback']:
     
-    analysis=TextBlob(feedback)
+    analysis=TextBlob(str(feedback))
     polarity=analysis.sentiments.polarity
      
 if polarity>0:
@@ -67,4 +67,5 @@ else:
   st.write("- Continue current teaching approach")
   st.write("- Maintain student engagement")
   
+
 
