@@ -31,7 +31,7 @@ if uploaded_file:
       sentiments.append("Neutral")
       keywords.extend([word.lower() for word in analysis.words])
 
-df['Sentiment']=sentiments
+  df['Sentiment']=sentiments
 
 st.subheader("Sentiment Analysis Result")
 st.dataframe(df[['feedback','Sentiment']])
@@ -65,4 +65,5 @@ else:
   st.write("- Continue current teaching approach")
   st.write("- Maintain student engagement")
   
+
 
